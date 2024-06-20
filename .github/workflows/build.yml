@@ -3,7 +3,7 @@ name: Java CI with Maven
 on:
   push:
     tags:
-      - 'v*'  # Trigger the workflow on tag creation (e.g., v1.0, v2.0)
+      - 'v*'
 
 jobs:
   build:
@@ -17,6 +17,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'temurin'
 
       - name: Build with Maven
         run: mvn clean install
