@@ -34,22 +34,28 @@ public class CommandHandler implements CommandExecutor {
         String path = "players." + playerUUID.toString();
 
         if (player.getGameMode() == GameMode.SPECTATOR) {
-            if (playerDataConfig.contains(path + ".location") && playerDataConfig.contains(path + ".gamemode") ) {
-                Location originalLocation = playerDataConfig.getLocation(path + ".location");
-                GameMode originalGameMode = GameMode.valueOf(playerDataConfig.getString(path + ".gamemode"));
+            Location originalLocation;
+            GameMode originalGameMode;
 
-                if (originalLocation != null && originalGameMode != null) {
-                    player.teleport(originalLocation);
-                    player.setGameMode(originalGameMode);
-                    player.sendMessage("§5EnderSpectate§8 >>§a You have been returned to your original location and game mode.");
-                    playerDataConfig.set(path, null);
-                    savePlayerData();
-                } else {
-                    player.sendMessage("§5EnderSpectate§8 >>§c Error: Original location or game mode not found.");
-                }
+            if (playerDataConfig.contains(path + ".location")) {
+                originalLocation = playerDataConfig.getLocation(path + ".location");
             } else {
-                player.sendMessage("§5EnderSpectate§8 >>§c Error: Original location or game mode not found.");
+                originalLocation = player.getLocation();
+                player.sendMessage("§5EnderSpectate§8 >>§c Error: Original location not found. Using Current Location");
             }
+
+            if (playerDataConfig.contains(path + ".gamemode")) {
+                originalGameMode = GameMode.valueOf(playerDataConfig.getString(path + ".gamemode"));
+            } else {
+                originalGameMode = GameMode.SURVIVAL;
+                player.sendMessage("\"§5EnderSpectate§8 >>§c Error: Original game mode not found. Using Survival game mode");
+            }
+
+            player.teleport(originalLocation);
+            player.setGameMode(originalGameMode);
+            player.sendMessage("§5EnderSpectate§8 >>§a You have been returned to your original location and game mode.");
+            playerDataConfig.set(path, null);
+            savePlayerData();
         } else {
             playerDataConfig.set(path + ".location", player.getLocation());
             playerDataConfig.set(path + ".gamemode", player.getGameMode().name());
