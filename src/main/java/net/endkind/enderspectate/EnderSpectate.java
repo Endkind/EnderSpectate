@@ -16,7 +16,7 @@ public final class EnderSpectate extends JavaPlugin {
         if (getCommand("enderspectate") != null) {
             getCommand("enderspectate").setExecutor(new CommandHandler());
         } else {
-            getLogger().severe("Befehl 'enderspectate' konnte nicht gefunden werden!");
+            getLogger().severe("Command 'enderspectate' could not be found!");
         }
     }
 
